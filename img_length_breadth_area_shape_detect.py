@@ -47,24 +47,7 @@ cv2.createTrackbar("Threshold2","parameters",20,255,empty)
 
 
 
-
-
-
-
-
 #def return_filename():
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def getC(img1,img2,objname,objd):#here img1 is taken as input and img2 as output but we are giving both of them at a time
@@ -130,21 +113,28 @@ def getC(img1,img2,objname,objd):#here img1 is taken as input and img2 as output
 
         
 
+cam_port = 0
+cam = cv2.VideoCapture(cam_port)
+res,img=cam.read()
 
+if res:
+    imgn="./upload/"
+    #cv2.imshow(" ",img)
+    cv2.imwrite(imgn+"cam_img.jpg",img)
+    # cv2.waitKey(0)
+    imgn=imgn+"cam_img.jpg"
+    print(imgn+"cam_img.jpg")
+    name="cam_img"
 
-imgn="./upload/"
+else:
 
-imgn2=input("Enter file name: ")
-imgn+=imgn2
-name=names(imgn2)
-print(name)
+    imgn="./upload/"
+    imgn2=input("Enter file name: ")
+    imgn+=imgn2
+    name=names(imgn2)
+    print(name)
 
 a=int(0)
-
-
-
-
-
 
 while True and a!=40:
     s1="the references are ,"
@@ -157,42 +147,42 @@ while True and a!=40:
 
 
 
-    # 
-    # wid=img.shape[1]
-    # hei=img.shape[0]
-    # print("width: "+str(wid)+"\nheight: "+str(hei)+"\n")
-    # if (hei>600 and wid>600):
-    #     img_half = cv2.resize(img, None, fx = 0.4, fy = 0.4)
-    #     img=img_half
-    #     cv2.imshow("changed or crossed img",img)                  
-        
-    #here onwards the img takes inp
+        # 
+        # wid=img.shape[1]
+        # hei=img.shape[0]
+        # print("width: "+str(wid)+"\nheight: "+str(hei)+"\n")
+        # if (hei>600 and wid>600):
+        #     img_half = cv2.resize(img, None, fx = 0.4, fy = 0.4)
+        #     img=img_half
+        #     cv2.imshow("changed or crossed img",img)                  
+            
+        #here onwards the img takes inp
 
     img2=img.copy()
     imgblur=cv2.GaussianBlur(img,(7,7,),1)#blur version but colored
 
-        # imghsv=cv2.cvtColor(imgblur, cv2.COLOR_BGR2HSV)
-        # mask = cv2.inRange(src=imgblur, lowerb=np.array([0, 64, 153]), upperb=np.array([179, 255, 255]))
-        # img_hsv_modify = cv2.bitwise_and(imgblur, imgblur, mask=mask)
-    
+            # imghsv=cv2.cvtColor(imgblur, cv2.COLOR_BGR2HSV)
+            # mask = cv2.inRange(src=imgblur, lowerb=np.array([0, 64, 153]), upperb=np.array([179, 255, 255]))
+            # img_hsv_modify = cv2.bitwise_and(imgblur, imgblur, mask=mask)
+        
 
     gray=cv2.cvtColor(imgblur,cv2.COLOR_BGR2GRAY)#convert the colored img to blure img
 
 
-        
+            
     threshold1=cv2.getTrackbarPos("Threshold1","parameters")
     threshold2=cv2.getTrackbarPos("Threshold2","parameters")
-        
-        
+            
+            
     imgcanny=cv2.Canny(gray,threshold1,threshold2)
     kernel=np.ones((5,5))
     imgDil=cv2.dilate(imgcanny,kernel,iterations=3)
     objname,objd=[],[]
 
     getC(imgDil,img2,objname,objd)
-        
+            
     print(objname)
-        # print(objd)
+            # print(objd)
 
     for i in objname:
         s1+=i
@@ -201,16 +191,15 @@ while True and a!=40:
         s=" , counters or points: "+i[0] +" , Area: "+i[1]+" , Width: "+i[2]+" cm , Height: " +i[3]+" cm , Shape: "+i[4]
         s2+=s
     s3=s1+s2
-        # print(s3)    
+   
     print("points: "+objd[0][0])
     print("Area: "+objd[0][1])
     print("Width: "+objd[0][2])
     print("Height: ",objd[0][3])
     print("shape: "+objd[0][4])
-
-
-    print(("*"*20)) 
         
+    print(("*"*20)) 
+            
     objname,objd=[],[]
 
     imgstack=stackImages(0.6,([img,gray,imgcanny],[img2,imgblur,imgDil]))#[img,gray,imgcanny],[img2,imgblur,imgDil]
@@ -218,16 +207,14 @@ while True and a!=40:
     cv2.imshow("actual",img2)
     cv2.waitKey(1000)
     a+=1
+    s4=""    
+    s4=s3    
+    s3+="\n\nIf you wanted to listen the output click 'yes'"
+   
 
-
-
-
-s4=""    
-s4=s3    
-s3+="\n\nIf you wanted to listen the output click 'yes'"
+   
 res=tkinter.messagebox.askquestion("Result", s3)
 print(name)
-
 if res=='yes':
     audio_coonvertion(s4,name,language,False)
     cv2.imwrite("./output/output_d"+name+".jpg",imgstack)
@@ -238,24 +225,7 @@ if res=='yes':
 else:
     print("the data is not saved")   
 
-
-
-
-
-
-
-
-#cv2.waitKey(10000)
-
-
-
-
-
-
-# threshold1=cv2.getTrackbarPos("Threshold1","paramters")
-# threshold2=cv2.getTrackbarPos("Threshold2","paramters")
-# imgcanny=cv2.Canny(gray,threshold1,threshold2)
-
-
-
-
+    #cv2.waitKey(10000)
+    # threshold1=cv2.getTrackbarPos("Threshold1","paramters")
+    # threshold2=cv2.getTrackbarPos("Threshold2","paramters")
+    # imgcanny=cv2.Canny(gray,threshold1,threshold2)
